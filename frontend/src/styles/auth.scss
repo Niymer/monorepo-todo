@@ -1,0 +1,16 @@
+.auth-page {
+  position: relative;
+  background: url('../assets/images/login-bg.png') no-repeat center/cover;
+  height: 100vh;
+
+  &::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-color: rgba(0,0,0,0.3);
+}
+  > .ant-card {
+    position: relative;
+    z-index: 1;
+}
+}

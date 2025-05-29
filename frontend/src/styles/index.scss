@@ -1,0 +1,63 @@
+@use 'sass:math';
+@use './variables' as vars;
+@use './mixins';
+@use './auth';
+@use './todoList';
+
+html, body, #root {
+  height: 100%;
+  margin: 0;
+}
+
+body {
+  background: vars.$color-bg-layout;
+  font-size: vars.$font-size-base;
+}
+
+// 页面主容器
+.container {
+  max-width: vars.$container-max;
+  margin: 0 auto;
+  padding: vars.$gutter;
+
+  // 移动端响应
+  @include mixins.respond(sm) {
+    padding: math.div(vars.$gutter, 2);
+  }
+}
+
+// 登录 / 注册 居中
+.auth-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+
+  .ant-card {
+    width: 360px;
+    border-radius: vars.$border-radius;
+  }
+}
+
+// TodoCard 组件局部样式
+.todo-card {
+  margin-bottom: 16px;
+  border-radius: vars.$border-radius;
+
+  .ant-card-head {
+    // 标题区也可以定制
+    padding: 12px 16px;
+  }
+
+  .card-content {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+}
+
+// 按钮群间距示例
+.btn-group {
+  display: flex;
+  gap: 12px;
+}

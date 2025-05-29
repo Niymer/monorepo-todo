@@ -1,0 +1,23 @@
+// src/styles/_mixins.scss
+
+// 先载入 Sass 自带的 map 模块
+@use 'sass:map';
+// 再载入你定义的变量，并起个别名 vars
+@use './variables' as vars;
+
+/**
+ * 根据 key 去取断点值
+ */
+@function bp($key) {
+  // map.get 的第一个参数要是 vars.$breakpoints
+  @return map.get(vars.$breakpoints, $key);
+}
+
+/**
+ * 响应式 media mixin
+ */
+@mixin respond($point) {
+  @media (max-width: bp($point)) {
+    @content;
+  }
+}

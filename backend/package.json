@@ -1,0 +1,26 @@
+{
+  "name": "todo-backend",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "dev": "nodemon index.js",
+    "start": "node index.js",
+    "build": "echo \"No build step for backend\"",
+    "migrate": "prisma migrate deploy",
+    "push": "prisma db push",
+    "studio": "prisma studio --port 5555"
+  },
+  "dependencies": {
+    "@prisma/client": "^4.8.0",
+    "bcryptjs": "^3.0.2",
+    "cors": "^2.8.5",
+    "dotenv": "^16.0.3",
+    "express": "^4.18.2",
+    "jsonwebtoken": "^9.0.0",
+    "winston": "^3.17.0"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.22",
+    "prisma": "^4.8.0"
+  }
+}

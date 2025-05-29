@@ -1,0 +1,30 @@
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model User {
+  id        String   @id @default(uuid())
+  email     String   @unique
+  password  String
+  todos     Todo[]
+  createdAt DateTime @default(now())
+}
+
+model Todo {
+  id          String    @id @default(uuid())
+  title       String
+  description String?
+  priority    String // HIGH | MEDIUM | LOW
+  done        Boolean   @default(false)
+  dueDate     DateTime?
+  user        User      @relation(fields: [userId], references: [id])
+  userId      String
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+  isDelete    Int       @default(-1) // 新增：-1 表示未删除，1 表示已删除
+}
