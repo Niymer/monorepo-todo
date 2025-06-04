@@ -25,6 +25,8 @@ export async function registerApi(
     const resp: BizResp<{ token: string }> = await http.post('/auth/register', {
         email, password
     });
+    if (resp.code !== 1) throw new Error(resp.msg || '注册失败');
+    message.success('注册成功');
     return resp.data;
 }
 
