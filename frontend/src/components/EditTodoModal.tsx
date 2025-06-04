@@ -1,9 +1,9 @@
 import React, {useEffect} from 'react'
-import {Todo, TodoPayload} from '@/services/todo'
 import {DatePicker, Form, Input, message, Modal, Select} from 'antd'
 import {Dayjs} from 'dayjs'
 import dayjs from 'dayjs'
 import {priorities} from '@/components/NewTodoModal'
+import {Todo, TodoPayload} from "@/types";
 
 export interface editTodoPayload {
     title: string

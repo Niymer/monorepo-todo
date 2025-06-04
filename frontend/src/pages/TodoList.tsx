@@ -1,34 +1,50 @@
-import React, {useEffect, useState} from 'react';
-import {Button, Empty, List, Pagination, Space} from 'antd';
-import {PlusOutlined, LogoutOutlined} from '@ant-design/icons';
+import React, { useEffect, useState } from 'react';
+import { Grid, Button, Empty, List, Pagination, Space, Table, Popconfirm, message } from 'antd';
+import { PlusOutlined, LogoutOutlined, EditOutlined, CheckSquareOutlined, DeleteOutlined } from '@ant-design/icons';
 import {
     fetchTodos,
     addTodo,
     toggleTodo,
     deleteTodo,
+    editTodo,
 } from '@/services/todo';
 import NewTodoModal from '@/components/NewTodoModal';
+import EditTodoModal from '@/components/EditTodoModal';
 import TodoCard from '@/components/TodoCard';
-import {useAuth} from '@/hooks/useAuth';
-import {Todo, TodoPayload} from "@/types";
+import { useAuth } from '@/hooks/useAuth';
+import { Todo, TodoPayload } from '@/types';
+import { utcToDate } from '@/utils/date';
+import { priorities } from '@/components/NewTodoModal';
 
-const TodoList: React.FC = () => {
+const { useBreakpoint } = Grid;
+
+// 格式化字段
+const formatTodo = (todo: Todo) => {
+    const formatCreatedAt = utcToDate(todo.createdAt, 'ymdhms');
+    const formatPriority = todo.priority
+        ? priorities.find(p => p.value === todo.priority)?.label
+        : '--';
+    const formatDueDate = todo.dueDate ? utcToDate(todo.dueDate, 'ymdhms') : '--';
+    const formatDone = todo.done ? '已完成' : '未完成';
+    return { ...todo, formatCreatedAt, formatPriority, formatDueDate, formatDone };
+};
+
+const ResponsiveTodoList: React.FC = () => {
+    const screens = useBreakpoint();
+    const isMobile = !screens.md;
+
     const [todos, setTodos] = useState<Todo[]>([]);
     const [loading, setLoading] = useState(false);
     const [modalOpen, setModalOpen] = useState(false);
-
-    /** 分页状态 */
     const [pageNum, setPageNum] = useState(1);
     const [pageSize, setPageSize] = useState(10);
-    const [total, setTotal] = useState<number | undefined>(undefined);
+    const [total, setTotal] = useState<number>();
+    const [editingTodo, setEditingTodo] = useState<Todo | null>(null);
+    const { logout } = useAuth();
 
-    const {logout} = useAuth();
-
-    /** 拉取数据 */
     const load = async (page = pageNum, size = pageSize) => {
         setLoading(true);
-        const {list, total} = await fetchTodos(page, size);
-        console.log('拉取待办列表', {list, total});
+        const { list, total } = await fetchTodos(page, size);
         setTodos(list);
         setTotal(total);
         setLoading(false);
@@ -38,38 +54,92 @@ const TodoList: React.FC = () => {
         load();
     }, []);
 
-    /** 新增 */
     const handleAdd = async (payload: TodoPayload) => {
         await addTodo(payload);
         setModalOpen(false);
-        await load(1, pageSize);                            // 新增后回第一页
+        await load(1, pageSize);
     };
 
-    /** 翻页 / 改 pageSize */
+    const handleToggle = async (id: string) => {
+        await toggleTodo(id);
+        await load(pageNum, pageSize);
+    };
+
+    const handleDelete = async (id: string) => {
+        await deleteTodo(id);
+        message.success('删除成功');
+        await load(pageNum, pageSize);
+    };
+
+    const handleUpdate = async (payload: TodoPayload) => {
+        if (!editingTodo) return;
+        await editTodo(editingTodo.id, payload);
+        message.success('已保存');
+        setEditingTodo(null);
+        await load(pageNum, pageSize);
+    };
+
     const handlePageChange = (page: number, size: number) => {
         setPageNum(page);
         setPageSize(size);
         load(page, size);
     };
 
+    // PC 端 Table 列定义
+    const columns = [
+        { title: '标题', dataIndex: 'title', key: 'title' },
+        { title: '描述', dataIndex: 'description', key: 'description' },
+        { title: '优先级', dataIndex: 'formatPriority', key: 'priority' },
+        { title: '创建时间', dataIndex: 'formatCreatedAt', key: 'createdAt' },
+        { title: '截止日期', dataIndex: 'formatDueDate', key: 'dueDate' },
+        { title: '状态', dataIndex: 'formatDone', key: 'done' },
+        {
+            title: '操作',
+            key: 'actions',
+            render: (_: any, record: Todo) => (
+                <Space>
+                    {!record.done && (
+                        <Button
+                            type="text"
+                            icon={<EditOutlined />}
+                            onClick={() => setEditingTodo(record)}
+                        />
+                    )}
+                    <Button
+                        type="text"
+                        icon={<CheckSquareOutlined />}
+                        onClick={() => handleToggle(record.id)}
+                    />
+                    <Popconfirm
+                        title="确定要删除该待办吗？"
+                        onConfirm={() => handleDelete(record.id)}
+                        okText="删除"
+                        cancelText="取消"
+                    >
+                        <Button type="text" icon={<DeleteOutlined />} danger />
+                    </Popconfirm>
+                </Space>
+            ),
+        },
+    ];
+
+    // 格式化数据
+    const dataSource = todos.map(formatTodo);
+
     return (
-        <div className={'todo-list'}>
-            <Space style={{marginBottom: 16}}>
-                <Button
-                    type="primary"
-                    icon={<PlusOutlined/>}
-                    onClick={() => setModalOpen(true)}
-                >
+        <div className="todo-list">
+            <Space style={{ marginBottom: 16 }}>
+                <Button type="primary" icon={<PlusOutlined />} onClick={() => setModalOpen(true)}>
                     新增
                 </Button>
-                <Button icon={<LogoutOutlined/>} onClick={logout}>
+                <Button icon={<LogoutOutlined />} onClick={logout}>
                     退出
                 </Button>
             </Space>
 
             {todos.length === 0 && !loading ? (
-                <Empty description="暂无待办"/>
-            ) : (
+                <Empty description="暂无待办" />
+            ) : isMobile ? (
                 <>
                     <List
                         dataSource={todos}
@@ -77,35 +147,56 @@ const TodoList: React.FC = () => {
                         renderItem={item => (
                             <TodoCard
                                 todo={item}
-                                onToggle={() => toggleTodo(item.id).then(() => load(pageNum, pageSize))}
-                                onDelete={() => deleteTodo(item.id).then(() => load(pageNum, pageSize))}
+                                onToggle={() => handleToggle(item.id)}
+                                onDelete={() => handleDelete(item.id)}
                                 onUpdated={() => load(pageNum, pageSize)}
                             />
                         )}
                     />
-
-                    {/* 分页器 */}
                     <Pagination
-                        style={{marginTop: 24, textAlign: 'right'}}
+                        style={{ marginTop: 24, textAlign: 'right' }}
                         current={pageNum}
                         pageSize={pageSize}
                         total={total}
                         showSizeChanger
                         onChange={handlePageChange}
                         showTotal={t => `共 ${t} 条`}
-                        align={'end'}
-                        hideOnSinglePage={true}
+                        hideOnSinglePage
+                    />
+                </>
+            ) : (
+                <>
+                    <Table
+                        rowKey="id"
+                        loading={loading}
+                        columns={columns}
+                        dataSource={dataSource}
+                        pagination={false}
+                    />
+                    <Pagination
+                        style={{ marginTop: 16, textAlign: 'right' }}
+                        current={pageNum}
+                        pageSize={pageSize}
+                        total={total}
+                        showSizeChanger
+                        onChange={handlePageChange}
+                        showTotal={t => `共 ${t} 条`}
                     />
                 </>
             )}
 
-            <NewTodoModal
-                open={modalOpen}
-                onOk={handleAdd}
-                onCancel={() => setModalOpen(false)}
-            />
+            <NewTodoModal open={modalOpen} onOk={handleAdd} onCancel={() => setModalOpen(false)} />
+            {editingTodo && (
+                <EditTodoModal
+                    todo={editingTodo}
+                    open={!!editingTodo}
+                    onOk={handleUpdate}
+                    onUpdated={() => load(pageNum, pageSize)}
+                    onCancel={() => setEditingTodo(null)}
+                />
+            )}
         </div>
     );
 };
 
-export default TodoList;
+export default ResponsiveTodoList;
