@@ -6,7 +6,6 @@ import path from 'path';
 export default defineConfig(({mode}) => {
     // 1. 加载 .env、.env.development、.env.production 等
     const env = loadEnv(mode, process.cwd());
-    console.log('env',env)
     return {
         define: {
             'process.env': {
