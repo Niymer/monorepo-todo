@@ -2,6 +2,7 @@ const express = require('express');
 const path    = require('path');
 const jwt     = require('jsonwebtoken');
 const dotenv  = require('dotenv');
+const cors    = require('cors');
 
 dotenv.config();
 
@@ -15,6 +16,8 @@ const PORT = process.env.PORT || 3000;
 
 /* --------- 全局中间件 ---------- */
 app.use(express.json());
+const corsOptions = process.env.CORS_ORIGIN ? { origin: process.env.CORS_ORIGIN } : {};
+app.use(cors(corsOptions));
 app.use(responseWrapper);   // 统一返回结构
 app.use(requestLogger);     // 日志
 

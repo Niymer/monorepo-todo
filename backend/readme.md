@@ -21,6 +21,17 @@
 
 ---
 
+## 环境变量
+
+在 `backend/.env` 中配置以下变量：
+
+- `DATABASE_URL`：PostgreSQL 连接串
+- `JWT_SECRET`：签发 JWT 的密钥
+- `JWT_SESSION_DURATION`：JWT 有效时间
+- `CORS_ORIGIN`：允许的跨域来源，如 `http://localhost:5173`
+
+---
+
 ## 1. 错误概览与成因
 
 | 错误代码/现象 | 根本原因 | 触发位置 |
