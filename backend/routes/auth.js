@@ -1,6 +1,7 @@
 const express = require('express')
 const bcrypt = require('bcryptjs')
 const jwt = require('jsonwebtoken')
+const { check, validationResult } = require('express-validator')
 const prisma = require('../utils/db')
 
 const router = express.Router()
@@ -8,9 +9,17 @@ const JWT_SECRET = process.env.JWT_SECRET
 const JWT_SESSION_DURATION= process.env.JWT_SESSION_DURATION || '2h'
 
 /** 注册 */
-router.post('/register', async (req, res) => {
+router.post('/register',
+  [
+    check('email').isEmail().withMessage('邮箱格式不正确'),
+    check('password').isLength({ min: 6 }).withMessage('密码长度至少6位'),
+  ],
+  async (req, res) => {
   const { email, password } = req.body
   if (!email || !password) return res.fail(400, '邮箱和密码为必填项')
+
+  const errors = validationResult(req)
+  if (!errors.isEmpty()) return res.fail(400, errors.array()[0].msg)
 
   try {
     const exist = await prisma.user.findUnique({ where: { email } })
@@ -31,9 +40,17 @@ router.post('/register', async (req, res) => {
 })
 
 /** 登录 */
-router.post('/login', async (req, res) => {
+router.post('/login',
+  [
+    check('email').isEmail().withMessage('邮箱格式不正确'),
+    check('password').isLength({ min: 6 }).withMessage('密码长度至少6位'),
+  ],
+  async (req, res) => {
   const { email, password } = req.body
   if (!email || !password) return res.fail(400, '邮箱和密码为必填项')
+
+  const errors = validationResult(req)
+  if (!errors.isEmpty()) return res.fail(400, errors.array()[0].msg)
 
   try {
     const user = await prisma.user.findUnique({ where: { email } })
