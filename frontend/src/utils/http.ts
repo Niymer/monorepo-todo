@@ -28,7 +28,8 @@ http.interceptors.response.use(
         return Promise.reject(new Error(msg));
     },
     err => {
-        if (err?.status === 401) {
+        const status = err.response?.status;
+        if (status === 401) {
             if (!isAuthModalShow) {
                 isAuthModalShow = true;
                 const modal = Modal.error({
@@ -49,10 +50,10 @@ http.interceptors.response.use(
                     window.location.href = '/login';
                 }, 2500);
             }
-        } else if (err?.status === 403) {
+        } else if (status === 403) {
             message.error('无权限操作');
         } else {
-            message.error(err?.data?.msg || err.message || '请求异常');
+            message.error(err.response?.data?.msg || err.message || '请求异常');
         }
         return Promise.reject(err);
     }
