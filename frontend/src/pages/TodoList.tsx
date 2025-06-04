@@ -44,10 +44,15 @@ const ResponsiveTodoList: React.FC = () => {
 
     const load = async (page = pageNum, size = pageSize) => {
         setLoading(true);
-        const { list, total } = await fetchTodos(page, size);
-        setTodos(list);
-        setTotal(total);
-        setLoading(false);
+        try {
+            const { list, total } = await fetchTodos(page, size);
+            setTodos(list);
+            setTotal(total);
+        } catch (err: any) {
+            message.error(err?.message || '加载待办列表失败');
+        } finally {
+            setLoading(false);
+        }
     };
 
     useEffect(() => {
@@ -55,28 +60,44 @@ const ResponsiveTodoList: React.FC = () => {
     }, []);
 
     const handleAdd = async (payload: TodoPayload) => {
-        await addTodo(payload);
-        setModalOpen(false);
-        await load(1, pageSize);
+        try {
+            await addTodo(payload);
+            setModalOpen(false);
+            await load(1, pageSize);
+        } catch (err: any) {
+            message.error(err?.message || '新增待办失败');
+        }
     };
 
     const handleToggle = async (id: string) => {
-        await toggleTodo(id);
-        await load(pageNum, pageSize);
+        try {
+            await toggleTodo(id);
+            await load(pageNum, pageSize);
+        } catch (err: any) {
+            message.error(err?.message || '切换状态失败');
+        }
     };
 
     const handleDelete = async (id: string) => {
-        await deleteTodo(id);
-        message.success('删除成功');
-        await load(pageNum, pageSize);
+        try {
+            await deleteTodo(id);
+            message.success('删除成功');
+            await load(pageNum, pageSize);
+        } catch (err: any) {
+            message.error(err?.message || '删除失败');
+        }
     };
 
     const handleUpdate = async (payload: TodoPayload) => {
         if (!editingTodo) return;
-        await editTodo(editingTodo.id, payload);
-        message.success('已保存');
-        setEditingTodo(null);
-        await load(pageNum, pageSize);
+        try {
+            await editTodo(editingTodo.id, payload);
+            message.success('已保存');
+            setEditingTodo(null);
+            await load(pageNum, pageSize);
+        } catch (err: any) {
+            message.error(err?.message || '更新失败');
+        }
     };
 
     const handlePageChange = (page: number, size: number) => {
