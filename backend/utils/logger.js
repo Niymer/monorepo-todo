@@ -1,15 +1,17 @@
-const { createLogger, format, transports } = require('winston')
-const { combine, timestamp, printf } = format
-const path = require('path')
-const fs = require('fs')
+const { createLogger, format, transports } = require('winston');
+const { combine, timestamp, printf } = format;
+const path = require('path');
+const fs = require('fs');
 
-const logsDir = path.join(__dirname, '..', 'logs')
-if (!fs.existsSync(logsDir)) fs.mkdirSync(logsDir)
+const logsDir = path.join(__dirname, '..', 'logs');
+if (!fs.existsSync(logsDir)) fs.mkdirSync(logsDir);
 
-const logFmt = printf(({ timestamp, level, message }) =>
-  `${timestamp} ${level.toUpperCase()}: ${message}`)
+const logFmt = printf(
+  ({ timestamp, level, message }) =>
+    `${timestamp} ${level.toUpperCase()}: ${message}`,
+);
 
-const onlyInfo = format(info => (info.level === 'info' ? info : false))
+const onlyInfo = format((info) => (info.level === 'info' ? info : false));
 
 module.exports = createLogger({
   format: combine(timestamp({ format: 'YYYY-MM-DD HH:mm:ss' })),
@@ -27,4 +29,4 @@ module.exports = createLogger({
       format: combine(logFmt),
     }),
   ],
-})
+});

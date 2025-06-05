@@ -1,24 +1,26 @@
 const express = require('express');
-const jwt     = require('jsonwebtoken');
-const dotenv  = require('dotenv');
-const cors    = require('cors');
+const jwt = require('jsonwebtoken');
+const dotenv = require('dotenv');
+const cors = require('cors');
 
 dotenv.config();
 
 const responseWrapper = require('./middlewares/responseWrapper');
-const requestLogger   = require('./middlewares/requestLogger');
-const authRoutes      = require('./routes/auth');
-const todoRoutes      = require('./routes/todos');
+const requestLogger = require('./middlewares/requestLogger');
+const authRoutes = require('./routes/auth');
+const todoRoutes = require('./routes/todos');
 
-const app  = express();
+const app = express();
 const PORT = process.env.PORT || 3000;
 
 /* --------- 全局中间件 ---------- */
 app.use(express.json());
-const corsOptions = process.env.CORS_ORIGIN ? { origin: process.env.CORS_ORIGIN } : {};
+const corsOptions = process.env.CORS_ORIGIN
+  ? { origin: process.env.CORS_ORIGIN }
+  : {};
 app.use(cors(corsOptions));
-app.use(responseWrapper);   // 统一返回结构
-app.use(requestLogger);     // 日志
+app.use(responseWrapper); // 统一返回结构
+app.use(requestLogger); // 日志
 
 /* --------- JWT 认证 ---------- */
 function authenticateToken(req, res, next) {
@@ -33,7 +35,7 @@ function authenticateToken(req, res, next) {
 }
 
 /* --------- 路由 ---------- */
-app.use('/api/auth', authRoutes);                       // /api/register, /api/login
+app.use('/api/auth', authRoutes); // /api/register, /api/login
 app.use('/api/todos', authenticateToken, todoRoutes);
 
 /* --------- 404 ---------- */

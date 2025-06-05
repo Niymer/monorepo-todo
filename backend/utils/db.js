@@ -11,4 +11,3 @@ process.on('SIGINT', async () => {
 });
 
 module.exports = prisma;
-
