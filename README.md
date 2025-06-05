@@ -50,7 +50,17 @@ pnpm run dev        # 默认端口 http://localhost:5173
 pnpm run dev
 ```
 
+
+
 该脚本会同时启动前端、后端和 Prisma Studio。
+
+### 代码检查与格式化
+
+```bash
+pnpm lint
+pnpm format
+```
+
 
 ## 环境变量示例
 
