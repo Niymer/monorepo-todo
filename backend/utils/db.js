@@ -7,7 +7,7 @@ const prisma = new PrismaClient();
 // 捕获程序结束信号，确保 Prisma 正常断开连接
 process.on('SIGINT', async () => {
   await prisma.$disconnect();
-  process.exit(0);
+  throw new Error('SIGINT');
 });
 
 module.exports = prisma;
