@@ -30,7 +30,7 @@ export interface AuthCtx {
     logout: () => void;
 }
 
-export interface BizResp<T = any> {
+export interface BizResp<T = unknown> {
     code: number;
     msg: string;
     data: T;
