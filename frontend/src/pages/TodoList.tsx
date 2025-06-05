@@ -48,8 +48,9 @@ const ResponsiveTodoList: React.FC = () => {
             const { list, total } = await fetchTodos(page, size);
             setTodos(list);
             setTotal(total);
-        } catch (err: any) {
-            message.error(err?.message || '加载待办列表失败');
+        } catch (err: unknown) {
+            const msg = err instanceof Error ? err.message : '加载待办列表失败';
+            message.error(msg);
         } finally {
             setLoading(false);
         }
@@ -64,8 +65,9 @@ const ResponsiveTodoList: React.FC = () => {
             await addTodo(payload);
             setModalOpen(false);
             await load(1, pageSize);
-        } catch (err: any) {
-            message.error(err?.message || '新增待办失败');
+        } catch (err: unknown) {
+            const msg = err instanceof Error ? err.message : '新增待办失败';
+            message.error(msg);
         }
     };
 
@@ -73,8 +75,9 @@ const ResponsiveTodoList: React.FC = () => {
         try {
             await toggleTodo(id);
             await load(pageNum, pageSize);
-        } catch (err: any) {
-            message.error(err?.message || '切换状态失败');
+        } catch (err: unknown) {
+            const msg = err instanceof Error ? err.message : '切换状态失败';
+            message.error(msg);
         }
     };
 
@@ -83,8 +86,9 @@ const ResponsiveTodoList: React.FC = () => {
             await deleteTodo(id);
             message.success('删除成功');
             await load(pageNum, pageSize);
-        } catch (err: any) {
-            message.error(err?.message || '删除失败');
+        } catch (err: unknown) {
+            const msg = err instanceof Error ? err.message : '删除失败';
+            message.error(msg);
         }
     };
 
@@ -95,8 +99,9 @@ const ResponsiveTodoList: React.FC = () => {
             message.success('已保存');
             setEditingTodo(null);
             await load(pageNum, pageSize);
-        } catch (err: any) {
-            message.error(err?.message || '更新失败');
+        } catch (err: unknown) {
+            const msg = err instanceof Error ? err.message : '更新失败';
+            message.error(msg);
         }
     };
 
@@ -117,7 +122,7 @@ const ResponsiveTodoList: React.FC = () => {
         {
             title: '操作',
             key: 'actions',
-            render: (_: any, record: Todo) => (
+            render: (_: unknown, record: Todo) => (
                 <Space>
                     {!record.done && (
                         <Button

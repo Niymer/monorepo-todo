@@ -43,7 +43,7 @@ const TodoCard: React.FC<Props> = ({todo, onToggle, onDelete, onUpdated}) => {
             message.success('已保存');
             setEditOpen(false);
             onUpdated();
-        } catch (e) {
+        } catch {
             message.error('保存失败');
         }
     };
