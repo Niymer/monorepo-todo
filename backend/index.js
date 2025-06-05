@@ -1,5 +1,4 @@
 const express = require('express');
-const path    = require('path');
 const jwt     = require('jsonwebtoken');
 const dotenv  = require('dotenv');
 const cors    = require('cors');
