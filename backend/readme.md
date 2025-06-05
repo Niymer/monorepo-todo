@@ -8,7 +8,7 @@
 在仓库根目录执行：
 
 ```bash
-npm install
+pnpm install
 ```
 
 该命令会为 `backend` 工作区安装所有依赖。
@@ -31,13 +31,13 @@ PORT=3000                # 服务端口，可不填
 
 ```bash
 npx prisma db push            # 根据 schema 创建表
-npm run migrate -w backend    # 若存在迁移脚本
+pnpm --filter todo-backend run migrate    # 若存在迁移脚本
 ```
 
 ## 启动服务
 
 ```bash
-npm run dev -w backend
+pnpm --filter todo-backend run dev
 ```
 
 启动后可访问 `http://localhost:3000`。

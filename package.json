@@ -7,10 +7,9 @@
     "frontend"
   ],
   "scripts": {
-    "install": "npm install --save-dev concurrently",
-    "dev": "concurrently -n \"backend,frontend,studio\" -c \"cyan,green,magenta\" \"npm run dev -w backend\" \"npm run dev -w frontend\" \"npm run studio -w backend\"",
-    "build": "npm run build -w backend && npm run build -w frontend",
-    "start": "npm run start -w backend"
+    "dev": "concurrently -n \"backend,frontend,studio\" -c \"cyan,green,magenta\" \"pnpm --filter todo-backend run dev\" \"pnpm --filter todo-frontend run dev\" \"pnpm --filter todo-backend run studio\"",
+    "build": "pnpm --filter todo-backend run build && pnpm --filter todo-frontend run build",
+    "start": "pnpm --filter todo-backend run start"
   },
   "devDependencies": {
     "concurrently": "^7.6.0"
