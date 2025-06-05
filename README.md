@@ -15,7 +15,7 @@ package.json (根目录) - 提供同时运行前后端的脚本
 ### 全局安装依赖
 
 ```bash
-npm install
+pnpm install
 ```
 
 该命令会在 `backend` 和 `frontend` 两个工作区自动安装依赖。
@@ -24,7 +24,7 @@ npm install
 
 ```bash
 cd backend
-npm run dev        # 默认端口 http://localhost:3000
+pnpm run dev        # 默认端口 http://localhost:3000
 ```
 
 首次启动前需要配置 `.env`，并同步数据库：
@@ -37,7 +37,7 @@ npx prisma db push
 
 ```bash
 cd frontend
-npm run dev        # 默认端口 http://localhost:5173
+pnpm run dev        # 默认端口 http://localhost:5173
 ```
 
 前端在开发模式下会将 `/api` 请求代理到后端。
@@ -47,7 +47,7 @@ npm run dev        # 默认端口 http://localhost:5173
 在仓库根目录执行：
 
 ```bash
-npm run dev
+pnpm run dev
 ```
 
 该脚本会同时启动前端、后端和 Prisma Studio。

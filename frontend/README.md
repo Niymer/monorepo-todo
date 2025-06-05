@@ -7,9 +7,9 @@
 在 `frontend` 目录下可运行以下脚本：
 
 ```bash
-npm run dev      # 本地开发模式，端口默认为 5173
-npm run build    # 构建生产环境静态文件
-npm run preview  # 预览构建后的应用
+pnpm run dev      # 本地开发模式，端口默认为 5173
+pnpm run build    # 构建生产环境静态文件
+pnpm run preview  # 预览构建后的应用
 ```
 
 ## 环境变量
