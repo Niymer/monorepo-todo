@@ -9,9 +9,19 @@
   "scripts": {
     "dev": "concurrently -n \"backend,frontend,studio\" -c \"cyan,green,magenta\" \"pnpm --filter todo-backend run dev\" \"pnpm --filter todo-frontend run dev\" \"pnpm --filter todo-backend run studio\"",
     "build": "pnpm --filter todo-backend run build && pnpm --filter todo-frontend run build",
-    "start": "pnpm --filter todo-backend run start"
+    "start": "pnpm --filter todo-backend run start",
+    "lint": "pnpm -r lint",
+    "format": "pnpm -r format"
   },
   "devDependencies": {
-    "concurrently": "^7.6.0"
+    "@typescript-eslint/eslint-plugin": "^8.33.1",
+    "@typescript-eslint/parser": "^8.33.1",
+    "concurrently": "^7.6.0",
+    "eslint": "^8.57.0",
+    "eslint-config-prettier": "^10.1.5",
+    "eslint-plugin-node": "^11.1.0",
+    "eslint-plugin-react": "^7.37.5",
+    "eslint-plugin-react-hooks": "^5.2.0",
+    "prettier": "^3.5.3"
   }
 }

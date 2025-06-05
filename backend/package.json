@@ -8,7 +8,9 @@
     "build": "echo \"No build step for backend\"",
     "migrate": "prisma migrate deploy",
     "push": "prisma db push",
-    "studio": "prisma studio --port 5555"
+    "studio": "prisma studio --port 5555",
+    "lint": "eslint .",
+    "format": "prettier --write ."
   },
   "dependencies": {
     "@prisma/client": "^4.8.0",
