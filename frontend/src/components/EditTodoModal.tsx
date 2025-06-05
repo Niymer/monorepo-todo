@@ -59,7 +59,7 @@ const EditTodoModal: React.FC<Props> = ({todo, open, onOk, onCancel,onUpdated}) 
 
             await onOk(payload as TodoPayload)
             onUpdated()
-        } catch (err) {
+        } catch {
             message.error('编辑失败')
         }
     }
