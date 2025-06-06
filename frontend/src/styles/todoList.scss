@@ -1,3 +1,5 @@
+@use './mixins';
+
 .todo-list {
   display: flex;
   flex-direction: column;
@@ -64,7 +66,7 @@
     width: 120px;
   }
 
-  @include respond(sm) {
+  @include mixins.respond(sm) {
     flex-direction: column;
 
     .todo-search,
