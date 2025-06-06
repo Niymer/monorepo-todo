@@ -54,6 +54,7 @@
 .todo-controls {
   display: flex;
   flex-wrap: wrap;
+  align-items: center;
   gap: 8px;
   margin-bottom: 16px;
 
@@ -67,10 +68,9 @@
   }
 
   @include mixins.respond(sm) {
-    flex-direction: column;
-
     .todo-search,
     .todo-status {
+      flex-basis: 100%;
       width: 100%;
     }
   }
