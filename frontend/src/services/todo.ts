@@ -6,9 +6,11 @@ import { BizResp, Todo, TodoListResp, TodoPayload } from '@/types';
 export const fetchTodos = async (
   pageNum = 1,
   pageSize = 10,
+  keyword?: string,
+  done?: string,
 ): Promise<TodoListResp> => {
   const res: BizResp<Todo[]> = await http.get('/todos/getPage', {
-    params: { pageNum, pageSize },
+    params: { pageNum, pageSize, keyword, done },
   });
 
   const { code, msg, data, count } = res;

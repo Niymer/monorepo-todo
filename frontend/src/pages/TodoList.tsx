@@ -6,6 +6,8 @@ import {
   List,
   Pagination,
   Space,
+  Input,
+  Select,
   Table,
   Popconfirm,
   message,
@@ -62,12 +64,21 @@ const ResponsiveTodoList: React.FC = () => {
   const [pageSize, setPageSize] = useState(10);
   const [total, setTotal] = useState<number>();
   const [editingTodo, setEditingTodo] = useState<Todo | null>(null);
+  const [keyword, setKeyword] = useState('');
+  const [status, setStatus] = useState<'all' | 'done' | 'undone'>('all');
   const { logout } = useAuth();
 
-  const load = async (page = pageNum, size = pageSize) => {
+  const load = async (
+    page = pageNum,
+    size = pageSize,
+    kw = keyword,
+    s = status,
+  ) => {
     setLoading(true);
     try {
-      const { list, total } = await fetchTodos(page, size);
+      const doneParam =
+        s === 'all' ? undefined : s === 'done' ? 'true' : 'false';
+      const { list, total } = await fetchTodos(page, size, kw, doneParam);
       setTodos(list);
       setTotal(total);
     } catch (err: unknown) {
@@ -184,6 +195,31 @@ const ResponsiveTodoList: React.FC = () => {
         >
           新增
         </Button>
+        <Input.Search
+          allowClear
+          placeholder="搜索标题或描述"
+          value={keyword}
+          onChange={(e) => setKeyword(e.target.value)}
+          onSearch={(v) => {
+            setPageNum(1);
+            load(1, pageSize, v, status);
+          }}
+          style={{ width: 200 }}
+        />
+        <Select
+          style={{ width: 120 }}
+          value={status}
+          onChange={(v) => {
+            setStatus(v);
+            setPageNum(1);
+            load(1, pageSize, keyword, v);
+          }}
+          options={[
+            { label: '全部', value: 'all' },
+            { label: '未完成', value: 'undone' },
+            { label: '已完成', value: 'done' },
+          ]}
+        />
         <Button icon={<LogoutOutlined />} onClick={logout}>
           退出
         </Button>
