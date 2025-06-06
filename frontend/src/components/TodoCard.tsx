@@ -45,7 +45,7 @@ const TodoCard: React.FC<Props> = ({ todo, onToggle, onDelete, onUpdated }) => {
 
   const handleEdit = async (payload: TodoPayload) => {
     try {
-      await editTodo(todo.id, payload);
+      await editTodo(todo.uuid, payload);
       message.success('已保存');
       setEditOpen(false);
       onUpdated();

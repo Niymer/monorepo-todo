@@ -5,7 +5,7 @@ module.exports = (req, res, next) => {
   res.on('finish', () => {
     logger.info(
       `URL:${req.originalUrl}, User:${
-        req.userId || 'GUEST'
+        req.userUuid || 'GUEST'
       }, Operation:${req.method}_${req.originalUrl.toUpperCase()}`,
     );
   });

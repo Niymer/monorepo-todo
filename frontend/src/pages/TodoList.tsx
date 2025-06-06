@@ -104,9 +104,9 @@ const ResponsiveTodoList: React.FC = () => {
     }
   };
 
-  const handleToggle = async (id: string) => {
+  const handleToggle = async (uuid: string) => {
     try {
-      await toggleTodo(id);
+      await toggleTodo(uuid);
       await load(pageNum, pageSize);
     } catch (err: unknown) {
       const msg = err instanceof Error ? err.message : '切换状态失败';
@@ -114,9 +114,9 @@ const ResponsiveTodoList: React.FC = () => {
     }
   };
 
-  const handleDelete = async (id: string) => {
+  const handleDelete = async (uuid: string) => {
     try {
-      await deleteTodo(id);
+      await deleteTodo(uuid);
       message.success('删除成功');
       await load(pageNum, pageSize);
     } catch (err: unknown) {
@@ -128,7 +128,7 @@ const ResponsiveTodoList: React.FC = () => {
   const handleUpdate = async (payload: TodoPayload) => {
     if (!editingTodo) return;
     try {
-      await editTodo(editingTodo.id, payload);
+      await editTodo(editingTodo.uuid, payload);
       message.success('已保存');
       setEditingTodo(null);
       await load(pageNum, pageSize);
@@ -167,11 +167,11 @@ const ResponsiveTodoList: React.FC = () => {
           <Button
             type="text"
             icon={<CheckSquareOutlined />}
-            onClick={() => handleToggle(record.id)}
+            onClick={() => handleToggle(record.uuid)}
           />
           <Popconfirm
             title="确定要删除该待办吗？"
-            onConfirm={() => handleDelete(record.id)}
+            onConfirm={() => handleDelete(record.uuid)}
             okText="删除"
             cancelText="取消"
           >
@@ -240,8 +240,8 @@ const ResponsiveTodoList: React.FC = () => {
             renderItem={(item) => (
               <TodoCard
                 todo={item}
-                onToggle={() => handleToggle(item.id)}
-                onDelete={() => handleDelete(item.id)}
+                onToggle={() => handleToggle(item.uuid)}
+                onDelete={() => handleDelete(item.uuid)}
                 onUpdated={() => load(pageNum, pageSize)}
               />
             )}
@@ -260,7 +260,7 @@ const ResponsiveTodoList: React.FC = () => {
       ) : (
         <>
           <Table
-            rowKey="id"
+            rowKey="uuid"
             loading={loading}
             columns={columns}
             dataSource={dataSource}

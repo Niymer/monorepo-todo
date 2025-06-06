@@ -31,7 +31,7 @@ router.post(
         data: { email, password: hashed },
       });
 
-      const token = jwt.sign({ userId: user.id }, JWT_SECRET, {
+      const token = jwt.sign({ userUuid: user.uuid }, JWT_SECRET, {
         expiresIn: JWT_SESSION_DURATION,
       });
       res.success({ token }, '注册成功');
@@ -63,7 +63,7 @@ router.post(
       const match = await bcrypt.compare(password, user.password);
       if (!match) return res.fail(401, '密码错误');
 
-      const token = jwt.sign({ userId: user.id }, JWT_SECRET, {
+      const token = jwt.sign({ userUuid: user.uuid }, JWT_SECRET, {
         expiresIn: JWT_SESSION_DURATION,
       });
       res.success({ token }, '登录成功');

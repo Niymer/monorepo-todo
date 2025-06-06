@@ -29,7 +29,7 @@ function authenticateToken(req, res, next) {
 
   jwt.verify(token, process.env.JWT_SECRET, (err, payload) => {
     if (err) return res.fail(401, '令牌无效或已过期');
-    req.userId = payload.userId;
+    req.userUuid = payload.userUuid;
     next();
   });
 }

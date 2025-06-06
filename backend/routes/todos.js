@@ -15,7 +15,7 @@ router.get('/getPage', async (req, res) => {
   const take = pageSize;
 
   const where = {
-    userId: req.userId,
+    userUuid: req.userUuid,
     isDelete: -1,
     ...(doneRaw !== undefined
       ? { done: ['true', '1', true].includes(doneRaw) }
@@ -60,7 +60,7 @@ router.post('/add', async (req, res) => {
         description,
         priority: priority.toUpperCase(),
         dueDate: dueDate ? new Date(dueDate) : null,
-        userId: req.userId,
+        userUuid: req.userUuid,
       },
     });
     res.success(todo, '新增成功');
@@ -71,17 +71,17 @@ router.post('/add', async (req, res) => {
 });
 
 /** 完成 / 取消完成 */
-router.patch('/:id/toggle', async (req, res) => {
+router.patch('/:uuid/toggle', async (req, res) => {
   try {
     // 1️⃣ 先查找这条 todo 是否属于当前用户
     const todo = await prisma.todo.findFirst({
-      where: { id: req.params.id, userId: req.userId },
+      where: { uuid: req.params.uuid, userUuid: req.userUuid },
     });
     if (!todo) return res.fail(404, '记录不存在');
 
     // 2️⃣ 把 done 取反后写回
     const updated = await prisma.todo.update({
-      where: { id: todo.id }, // 只用唯一主键
+      where: { uuid: todo.uuid }, // 只用唯一主键
       data: { done: { set: !todo.done } },
     });
 
@@ -92,7 +92,7 @@ router.patch('/:id/toggle', async (req, res) => {
   }
 });
 /** 编辑 （可改 priority / description / title / dueDate） */
-router.patch('/:id/edit', async (req, res) => {
+router.patch('/:uuid/edit', async (req, res) => {
   const { title, description, priority, dueDate } = req.body;
 
   // 至少要传一个可修改字段
@@ -102,7 +102,7 @@ router.patch('/:id/edit', async (req, res) => {
   try {
     // ① 校验归属
     const todo = await prisma.todo.findFirst({
-      where: { id: req.params.id, userId: req.userId },
+      where: { uuid: req.params.uuid, userUuid: req.userUuid },
     });
     if (!todo) return res.fail(404, '记录不存在');
 
@@ -118,7 +118,7 @@ router.patch('/:id/edit', async (req, res) => {
 
     // ③ 更新
     const updated = await prisma.todo.update({
-      where: { id: todo.id },
+      where: { uuid: todo.uuid },
       data,
     });
     res.success(updated, '更新成功');
@@ -129,17 +129,17 @@ router.patch('/:id/edit', async (req, res) => {
 });
 
 /** 删除 */
-router.delete('/:id/delete', async (req, res) => {
+router.delete('/:uuid/delete', async (req, res) => {
   try {
-    const todoId = req.params.id;
-    // 如果你的 Prisma schema 里 id 是 Int，就写：
-    // const todoId = Number(req.params.id)
+    const todoId = req.params.uuid;
+    // 如果你的 Prisma schema 里 uuid 是 Int，就写：
+    // const todoId = Number(req.params.uuid)
 
     // ① 验证：属于当前用户 & 还没被删
     const todo = await prisma.todo.findFirst({
       where: {
-        id: todoId,
-        userId: req.userId,
+        uuid: todoId,
+        userUuid: req.userUuid,
         isDelete: -1, // 只查“未删除”的
       },
     });
@@ -149,7 +149,7 @@ router.delete('/:id/delete', async (req, res) => {
 
     // ② 软删除：把 isDelete 从 -1 改成 1
     await prisma.todo.update({
-      where: { id: todoId },
+      where: { uuid: todoId },
       data: { isDelete: 1 },
     });
 
