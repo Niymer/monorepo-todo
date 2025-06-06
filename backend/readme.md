@@ -48,3 +48,11 @@ pnpm --filter todo-backend run dev
 - `/api/todos`：认证后进行待办的增删改查。
 
 更详细的调试步骤与常见问题，请查阅 [`docs/debug-guide.md`](../docs/debug-guide.md)。
+
+## 运行测试
+
+```bash
+pnpm test
+```
+
+该命令会在当前工作区执行 Jest 测试用例。

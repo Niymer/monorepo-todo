@@ -42,4 +42,8 @@ app.use('/api/todos', authenticateToken, todoRoutes);
 app.use((req, res) => res.fail(404, '接口不存在'));
 
 /* --------- 启动 ---------- */
-app.listen(PORT, () => console.log(`🚀  http://localhost:${PORT}`));
+if (require.main === module) {
+  app.listen(PORT, () => console.log(`🚀  http://localhost:${PORT}`));
+}
+
+module.exports = app;

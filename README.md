@@ -61,6 +61,14 @@ pnpm lint
 pnpm format
 ```
 
+### 运行测试
+
+```bash
+pnpm test
+```
+
+该命令等同于 `pnpm --filter todo-backend test`，仅执行后端 Jest 用例。
+
 
 ## 环境变量示例
 

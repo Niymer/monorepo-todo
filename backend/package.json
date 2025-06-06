@@ -10,7 +10,8 @@
     "push": "prisma db push",
     "studio": "prisma studio --port 5555",
     "lint": "eslint .",
-    "format": "prettier --write ."
+    "format": "prettier --write .",
+    "test": "jest"
   },
   "engines": {
     "node": ">=16"
@@ -27,6 +28,9 @@
   },
   "devDependencies": {
     "nodemon": "^2.0.22",
-    "prisma": "^4.8.0"
+    "prisma": "^4.8.0",
+    "jest": "^29.7.0",
+    "supertest": "^6.3.3",
+    "uuid": "^9.0.1"
   }
 }
