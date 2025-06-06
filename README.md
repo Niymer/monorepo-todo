@@ -74,6 +74,16 @@ JWT_SESSION_DURATION="2h"
 VITE_API_BASE_URL="http://localhost:3000/api"
 ```
 
+### Docker Compose 启动
+
+在仓库根目录执行：
+
+```bash
+docker-compose up
+```
+
+该命令会构建并启动 `backend`、`frontend` 与 `postgres` 服务，默认账号密码见 `.env.example`。
+
 ## 功能概览
 
 - 用户注册与登录（JWT 鉴权）

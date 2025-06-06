@@ -1,0 +1,39 @@
+version: '3.8'
+services:
+  postgres:
+    image: postgres:15
+    environment:
+      POSTGRES_USER: todo_user
+      POSTGRES_PASSWORD: 123456
+      POSTGRES_DB: todo_database
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+
+  backend:
+    build:
+      context: .
+      dockerfile: backend/Dockerfile
+    environment:
+      DATABASE_URL: postgresql://todo_user:123456@postgres:5432/todo_database?schema=public
+      JWT_SECRET: todo_secret
+      JWT_SESSION_DURATION: 2h
+      PORT: 3000
+    depends_on:
+      - postgres
+    ports:
+      - "3000:3000"
+
+  frontend:
+    build:
+      context: .
+      dockerfile: frontend/Dockerfile
+      args:
+        VITE_API_BASE_URL: http://backend:3000/api
+    depends_on:
+      - backend
+    ports:
+      - "5173:4173"
+volumes:
+  postgres-data:
