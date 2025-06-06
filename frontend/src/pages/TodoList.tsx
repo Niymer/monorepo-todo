@@ -187,7 +187,11 @@ const ResponsiveTodoList: React.FC = () => {
 
   return (
     <div className="todo-list">
-      <Space style={{ marginBottom: 16 }}>
+      <Space
+        style={{ marginBottom: 16 }}
+        direction={isMobile ? 'vertical' : 'horizontal'}
+        wrap
+      >
         <Button
           type="primary"
           icon={<PlusOutlined />}
@@ -204,10 +208,10 @@ const ResponsiveTodoList: React.FC = () => {
             setPageNum(1);
             load(1, pageSize, v, status);
           }}
-          style={{ width: 200 }}
+          style={{ width: isMobile ? '100%' : 200 }}
         />
         <Select
-          style={{ width: 120 }}
+          style={{ width: isMobile ? '100%' : 120 }}
           value={status}
           onChange={(v) => {
             setStatus(v);
