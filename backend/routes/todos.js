@@ -8,16 +8,32 @@ router.get('/getPage', async (req, res) => {
   const pageNum = Math.max(parseInt(req.query.pageNum) || 1, 1);
   const pageSize = Math.max(parseInt(req.query.pageSize) || 10, 1);
   const orderBy = (req.query.orderBy || 'createTime desc').toLowerCase();
+  const keyword = (req.query.keyword || '').trim();
+  const doneRaw = req.query.done;
 
   const skip = (pageNum - 1) * pageSize;
   const take = pageSize;
 
+  const where = {
+    userId: req.userId,
+    isDelete: -1,
+    ...(doneRaw !== undefined
+      ? { done: ['true', '1', true].includes(doneRaw) }
+      : {}),
+    ...(keyword
+      ? {
+          OR: [
+            { title: { contains: keyword, mode: 'insensitive' } },
+            { description: { contains: keyword, mode: 'insensitive' } },
+          ],
+        }
+      : {}),
+  };
+
   try {
-    const total = await prisma.todo.count({
-      where: { userId: req.userId, isDelete: -1 },
-    });
+    const total = await prisma.todo.count({ where });
     const list = await prisma.todo.findMany({
-      where: { userId: req.userId, isDelete: -1 },
+      where,
       orderBy: orderBy.includes('asc')
         ? { createdAt: 'asc' }
         : { createdAt: 'desc' },
