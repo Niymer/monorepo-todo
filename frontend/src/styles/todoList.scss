@@ -48,3 +48,28 @@
     }
   }
 }
+
+.todo-controls {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 16px;
+
+  .todo-search {
+    flex: 1 1 200px;
+    min-width: 0;
+  }
+
+  .todo-status {
+    width: 120px;
+  }
+
+  @include respond(sm) {
+    flex-direction: column;
+
+    .todo-search,
+    .todo-status {
+      width: 100%;
+    }
+  }
+}

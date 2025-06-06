@@ -187,11 +187,7 @@ const ResponsiveTodoList: React.FC = () => {
 
   return (
     <div className="todo-list">
-      <Space
-        style={{ marginBottom: 16 }}
-        direction={isMobile ? 'vertical' : 'horizontal'}
-        wrap
-      >
+      <div className="todo-controls">
         <Button
           type="primary"
           icon={<PlusOutlined />}
@@ -208,10 +204,10 @@ const ResponsiveTodoList: React.FC = () => {
             setPageNum(1);
             load(1, pageSize, v, status);
           }}
-          style={{ width: isMobile ? '100%' : 200 }}
+          className="todo-search"
         />
         <Select
-          style={{ width: isMobile ? '100%' : 120 }}
+          className="todo-status"
           value={status}
           onChange={(v) => {
             setStatus(v);
@@ -227,7 +223,7 @@ const ResponsiveTodoList: React.FC = () => {
         <Button icon={<LogoutOutlined />} onClick={logout}>
           退出
         </Button>
-      </Space>
+      </div>
 
       {todos.length === 0 && !loading ? (
         <Empty description="暂无待办" />
