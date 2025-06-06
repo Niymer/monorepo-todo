@@ -1,3 +1,5 @@
+@use './mixins';
+
 .todo-list {
   display: flex;
   flex-direction: column;
@@ -45,6 +47,35 @@
           color: white;
         }
       }
+    }
+  }
+}
+
+.todo-controls {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 16px;
+
+  .todo-search {
+    flex: 1 1 200px;
+    max-width: 280px;
+    min-width: 0;
+  }
+
+  .todo-status {
+    width: 120px;
+  }
+
+  @include mixins.respond(sm) {
+    .todo-search,
+    .todo-status {
+      flex-basis: 100%;
+      width: 100%;
+    }
+    .todo-search {
+      max-width: none;
     }
   }
 }

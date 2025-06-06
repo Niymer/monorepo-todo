@@ -1,7 +1,7 @@
 export type Priority = 'LOW' | 'MEDIUM' | 'HIGH';
 
 export interface Todo {
-  id: string;
+  uuid: string;
   title: string;
   description?: string;
   done: boolean;
@@ -9,7 +9,7 @@ export interface Todo {
   createdAt: string;
   updatedAt?: string;
   dueDate?: string | null;
-  userId: string;
+  userUuid: string;
 }
 
 export interface TodoPayload {

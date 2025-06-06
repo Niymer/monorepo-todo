@@ -104,9 +104,9 @@ const ResponsiveTodoList: React.FC = () => {
     }
   };
 
-  const handleToggle = async (id: string) => {
+  const handleToggle = async (uuid: string) => {
     try {
-      await toggleTodo(id);
+      await toggleTodo(uuid);
       await load(pageNum, pageSize);
     } catch (err: unknown) {
       const msg = err instanceof Error ? err.message : '切换状态失败';
@@ -114,9 +114,9 @@ const ResponsiveTodoList: React.FC = () => {
     }
   };
 
-  const handleDelete = async (id: string) => {
+  const handleDelete = async (uuid: string) => {
     try {
-      await deleteTodo(id);
+      await deleteTodo(uuid);
       message.success('删除成功');
       await load(pageNum, pageSize);
     } catch (err: unknown) {
@@ -128,7 +128,7 @@ const ResponsiveTodoList: React.FC = () => {
   const handleUpdate = async (payload: TodoPayload) => {
     if (!editingTodo) return;
     try {
-      await editTodo(editingTodo.id, payload);
+      await editTodo(editingTodo.uuid, payload);
       message.success('已保存');
       setEditingTodo(null);
       await load(pageNum, pageSize);
@@ -167,11 +167,11 @@ const ResponsiveTodoList: React.FC = () => {
           <Button
             type="text"
             icon={<CheckSquareOutlined />}
-            onClick={() => handleToggle(record.id)}
+            onClick={() => handleToggle(record.uuid)}
           />
           <Popconfirm
             title="确定要删除该待办吗？"
-            onConfirm={() => handleDelete(record.id)}
+            onConfirm={() => handleDelete(record.uuid)}
             okText="删除"
             cancelText="取消"
           >
@@ -187,7 +187,7 @@ const ResponsiveTodoList: React.FC = () => {
 
   return (
     <div className="todo-list">
-      <Space style={{ marginBottom: 16 }}>
+      <div className="todo-controls">
         <Button
           type="primary"
           icon={<PlusOutlined />}
@@ -204,10 +204,10 @@ const ResponsiveTodoList: React.FC = () => {
             setPageNum(1);
             load(1, pageSize, v, status);
           }}
-          style={{ width: 200 }}
+          className="todo-search"
         />
         <Select
-          style={{ width: 120 }}
+          className="todo-status"
           value={status}
           onChange={(v) => {
             setStatus(v);
@@ -220,10 +220,15 @@ const ResponsiveTodoList: React.FC = () => {
             { label: '已完成', value: 'done' },
           ]}
         />
-        <Button icon={<LogoutOutlined />} onClick={logout}>
-          退出
-        </Button>
-      </Space>
+        <Popconfirm
+          title="确定要退出登录吗？"
+          onConfirm={logout}
+          okText="退出"
+          cancelText="取消"
+        >
+          <Button icon={<LogoutOutlined />}>退出</Button>
+        </Popconfirm>
+      </div>
 
       {todos.length === 0 && !loading ? (
         <Empty description="暂无待办" />
@@ -235,8 +240,8 @@ const ResponsiveTodoList: React.FC = () => {
             renderItem={(item) => (
               <TodoCard
                 todo={item}
-                onToggle={() => handleToggle(item.id)}
-                onDelete={() => handleDelete(item.id)}
+                onToggle={() => handleToggle(item.uuid)}
+                onDelete={() => handleDelete(item.uuid)}
                 onUpdated={() => load(pageNum, pageSize)}
               />
             )}
@@ -255,7 +260,7 @@ const ResponsiveTodoList: React.FC = () => {
       ) : (
         <>
           <Table
-            rowKey="id"
+            rowKey="uuid"
             loading={loading}
             columns={columns}
             dataSource={dataSource}

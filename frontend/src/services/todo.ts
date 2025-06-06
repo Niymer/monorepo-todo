@@ -28,8 +28,8 @@ export const fetchTodos = async (
 export const addTodo = (payload: TodoPayload) =>
   http.post<Todo, Todo>('/todos/add', payload);
 
-export const toggleTodo = async (id: string) => {
-  const res: BizResp<Todo[]> = await http.patch(`/todos/${id}/toggle`);
+export const toggleTodo = async (uuid: string) => {
+  const res: BizResp<Todo[]> = await http.patch(`/todos/${uuid}/toggle`);
   if (res?.code !== 1) {
     throw new Error(res.msg || '切换待办状态失败');
   }
@@ -37,8 +37,8 @@ export const toggleTodo = async (id: string) => {
   return res;
 };
 
-export const deleteTodo = (id: string) =>
-  http.delete<void, void>(`/todos/${id}/delete`);
+export const deleteTodo = (uuid: string) =>
+  http.delete<void, void>(`/todos/${uuid}/delete`);
 
-export const editTodo = (id: string, payload: TodoPayload) =>
-  http.patch<Todo, Todo>(`/todos/${id}/edit`, payload);
+export const editTodo = (uuid: string, payload: TodoPayload) =>
+  http.patch<Todo, Todo>(`/todos/${uuid}/edit`, payload);
