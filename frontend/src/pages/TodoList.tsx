@@ -220,9 +220,14 @@ const ResponsiveTodoList: React.FC = () => {
             { label: '已完成', value: 'done' },
           ]}
         />
-        <Button icon={<LogoutOutlined />} onClick={logout}>
-          退出
-        </Button>
+        <Popconfirm
+          title="确定要退出登录吗？"
+          onConfirm={logout}
+          okText="退出"
+          cancelText="取消"
+        >
+          <Button icon={<LogoutOutlined />}>退出</Button>
+        </Popconfirm>
       </div>
 
       {todos.length === 0 && !loading ? (
