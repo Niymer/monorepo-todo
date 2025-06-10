@@ -14,7 +14,8 @@ pnpm run preview  # 预览构建后的应用
 
 ## 环境变量
 
-开发模式下的 `.env.development` 文件提供了 `VITE_API_BASE_URL`，其默认值为 `http://localhost:3000/api`。`vite.config.ts` 中配置了代理，将以 `/api` 开头的请求转发到该地址。
+在启动前，请先将 `frontend/.env.example` 复制为 `frontend/.env.development`（生产构建可复制为 `frontend/.env.production`）。
+该文件提供了 `VITE_API_BASE_URL`，默认值为 `http://localhost:3000/api`。`vite.config.ts` 中配置了代理，将以 `/api` 开头的请求转发到该地址。
 
 ## 目录结构
 

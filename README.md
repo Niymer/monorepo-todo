@@ -27,7 +27,7 @@ cd backend
 pnpm run dev        # 默认端口 http://localhost:3000
 ```
 
-首次启动前需要配置 `.env`，并同步数据库：
+首次启动前需要将 `backend/.env.example` 复制为 `backend/.env`，并根据需要修改后同步数据库：
 
 ```bash
 npx prisma db push
@@ -37,6 +37,7 @@ npx prisma db push
 
 ```bash
 cd frontend
+cp .env.example .env.development   # 首次启动前执行
 pnpm run dev        # 默认端口 http://localhost:5173
 ```
 
