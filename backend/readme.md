@@ -15,7 +15,7 @@ pnpm install
 
 ## 环境变量
 
-在 `backend/.env` 中配置下列变量：
+首先将 `backend/.env.example` 复制为 `backend/.env`，然后根据需要填写下列变量：
 
 ```ini
 DATABASE_URL=...         # PostgreSQL 连接串
